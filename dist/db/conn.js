@@ -2,19 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const pg_1 = require("pg");
 const pool = new pg_1.Pool({
-    user: process.env.USER,
+    user: process.env.DB_USER,
     host: process.env.HOST,
     database: process.env.DATABASE,
     password: process.env.PASS,
     port: 5432,
-    max: 20, // Número máximo de conexões no pool
-    idleTimeoutMillis: 30000, // Tempo máximo em milissegundos que uma conexão pode ficar ociosa antes de ser fechada
-    connectionTimeoutMillis: 2000, // Tempo máximo em milissegundos para estabelecer uma conexão com o banco de dados
 });
-pool.connect((err, client, release) => {
-    if (err) {
-        return console.error("Erro ao obter cliente do pool", err);
-    }
+pool.connect().then(client => {
     console.log("Conectado ao banco de dados PostgreSQL");
+}).catch(err => {
+    console.error("Erro ao conectar ao banco de dados:", err);
 });
 exports.default = pool;

@@ -24,10 +24,10 @@ app.use(cors(corsOptions));
 
 //routes
 import userRoutes from "./routes/userRouter";
-import poemRoutes from "./routes/poemRouter"
+import poemRoutes from "./routes/poemRouter";
 
 app.use("/users", userRoutes);
-app.use("/poems", poemRoutes)
+app.use("/poems", poemRoutes);
 
 app.listen(port, () => {
   console.log(`App rodando na porta ${port}`);

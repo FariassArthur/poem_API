@@ -4,15 +4,15 @@ import pool from "../db/conn";
 import { Request, Response } from "express";
 
 //model
-import UserModel from "../models/UserModel";
+import PoemModel from "../models/PoemModel";
 
-export default class UserController {
-  static async checkAndCreateTable(req: Request, res: Response) {
+export default class PoemController {
+  static async checkAndCreateTablePoem(req: Request, res: Response) {
     try {
-      await UserModel.checkAndCreateTable();
+      await PoemModel.checkAndCreateTable();
       res.send("Tabela de usuários verificada ou criada com sucesso.");
     } catch (err) {
-      console.error("Erro ao verificar/criar tabela de usuários:", err);
+      console.error("Erro ao verificar/criar tabela de poems:", err);
       res.status(500).send("Erro ao verificar/criar tabela de usuários.");
     }
   }

@@ -21,8 +21,10 @@ const corsOptions = {
 };
 app.use((0, cors_1.default)(corsOptions));
 //routes
-const router_1 = __importDefault(require("./routes/router"));
-app.use(router_1.default);
+const userRouter_1 = __importDefault(require("./routes/userRouter"));
+const poemRouter_1 = __importDefault(require("./routes/poemRouter"));
+app.use("/users", userRouter_1.default);
+app.use("/poems", poemRouter_1.default);
 app.listen(port, () => {
     console.log(`App rodando na porta ${port}`);
 });

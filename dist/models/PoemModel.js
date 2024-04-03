@@ -13,40 +13,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const conn_1 = __importDefault(require("../db/conn"));
-class UserModel {
+class PoemModel {
     static checkAndCreateTable() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield conn_1.default.connect();
-                // Verifica se a tabela já existe
-                const tableExistsQuery = yield client.query(`SELECT to_regclass('public.usuarios')`);
+                //verifica se  a tabela existe
+                const tableExistsQuery = yield client.query(`SELECT to_regclass('public.poems')`);
                 const tableExists = tableExistsQuery.rows[0].to_regclass !== null;
                 if (!tableExists) {
-                    // Cria a tabela se ela não existir
                     yield client
                         .query(`
-          CREATE TABLE usuarios (
+        CREATE TABLE poems (
             id SERIAL PRIMARY KEY,
-            nome VARCHAR(100) NOT NULL,
-            email VARCHAR(100) UNIQUE NOT NULL,
-            senha VARCHAR(100) NOT NULL,
-            admin BOOLEAN DEFAULT FALSE
-          )
+            title VARCHAR(50) NOT NULL,
+            content TEXT NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            userId INTEGER REFERENCES public.usuarios(id)
+        )
         `)
-                        .then(() => console.log("Tabela usuarios criada com sucesso"))
-                        .catch((err) => console.error(`Erro ao criar tabela usuarios: ${err}`));
-                    console.log("Tabela usuarios criada com sucesso.");
+                        .then(() => console.log("Tabela poems inserida"))
+                        .catch((err) => console.error(`Erro na criação ta tabela poems: ${err}`));
                 }
                 else {
-                    console.log("Tabela usuarios já existe.");
+                    console.log("Tabela poems já existe");
                 }
                 client.release();
             }
-            catch (error) {
-                console.error("Erro ao verificar/criar tabela usuarios:", error);
-                throw error; // Propaga o erro para o controlador para tratamento adequado
+            catch (err) {
+                console.error(`Erro ao verificar ou criar tabela poems: ${err}`);
+                throw err;
             }
         });
     }
 }
-exports.default = UserModel;
+exports.default = PoemModel;

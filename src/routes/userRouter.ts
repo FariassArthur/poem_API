@@ -4,6 +4,8 @@ import UserController from "../controllers/userController";
 
 const router = express.Router();
 
-router.get("/", UserController.checkAndCreateTable);
+router.get("/", async (req, res) => {
+  await UserController.checkAndCreateTable(req, res);
+});
 
 export default router;

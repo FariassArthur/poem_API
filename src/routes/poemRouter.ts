@@ -1,10 +1,11 @@
 // router.ts
-import express, { Request, Response } from "express";
+import express from "express";
+import PoemController from "../controllers/poemController";
 
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("então");
+router.get("/", async (req, res) => {
+  await PoemController.checkAndCreateTablePoem(req, res);
 });
 
 export default router;
