@@ -8,23 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const pg_1 = require("pg");
-const pool = new pg_1.Pool({
-    user: process.env.USER,
-    host: process.env.HOST,
-    database: process.env.DATABASE,
-    password: process.env.PASS,
-    port: 5432,
-    max: 20, // Número máximo de conexões no pool
-    idleTimeoutMillis: 30000, // Tempo máximo em milissegundos que uma conexão pode ficar ociosa antes de ser fechada
-    connectionTimeoutMillis: 2000, // Tempo máximo em milissegundos para estabelecer uma conexão com o banco de dados
+const conn_1 = __importDefault(require("../db/conn"));
+const checkAndCreateTable = () => __awaiter(void 0, void 0, void 0, function* () {
+    const client = yield (0, conn_1.default)();
+    let exists;
+    try {
+        const result = yield client.query(`SELECT EXISTS (
+             SELECT FROM information_schema.tables 
+             WHERE table_name = 'usuarios'
+           )`);
+        exists = result.rows[0].exists;
+    }
+    catch (error) {
+        throw error;
+    }
 });
-// Função para obter um cliente do pool
-function getClient() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const client = yield pool.connect();
-        return client;
-    });
-}
-exports.default = getClient;
