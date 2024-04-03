@@ -1,5 +1,4 @@
-import { PoolClient } from "pg";
-import getClient from "../db/conn";
+import pool from "../db/conn";
 
 // Modelo de usuário
 interface Usuario {
@@ -10,20 +9,35 @@ interface Usuario {
   admin?: boolean;
 }
 
-const checkAndCreateTable = async (): Promise<void> => {
-  const client: PoolClient = await getClient();
+export default class UserModel {
+  static async checkAndCreateTable(): Promise<void> {
+    try {
+      const client = await pool.connect();
+      
+      // Verifica se a tabela já existe
+      const tableExistsQuery = await client.query(`SELECT to_regclass('public.usuarios')`);
+      const tableExists = tableExistsQuery.rows[0].to_regclass !== null;
 
-  let exists;
+      if (!tableExists) {
+        // Cria a tabela se ela não existir
+        await client.query(`
+          CREATE TABLE usuarios (
+            id SERIAL PRIMARY KEY,
+            nome VARCHAR(100) NOT NULL,
+            email VARCHAR(100) UNIQUE NOT NULL,
+            senha VARCHAR(100) NOT NULL,
+            admin BOOLEAN DEFAULT FALSE
+          )
+        `);
+        console.log('Tabela usuarios criada com sucesso.');
+      } else {
+        console.log('Tabela usuarios já existe.');
+      }
 
-  try {
-    const result = await client.query(
-      `SELECT EXISTS (
-             SELECT FROM information_schema.tables 
-             WHERE table_name = 'usuarios'
-           )`
-    );
-    exists = result.rows[0].exists;
-  } catch (error) {
-    throw error;
+      client.release();
+    } catch (error) {
+      console.error('Erro ao verificar/criar tabela usuarios:', error);
+      throw error; // Propaga o erro para o controlador para tratamento adequado
+    }
   }
-};
+}
