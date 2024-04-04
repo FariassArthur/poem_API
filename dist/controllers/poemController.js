@@ -18,12 +18,14 @@ class PoemController {
     static checkAndCreateTablePoem(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield PoemModel_1.default.checkAndCreateTable();
-                res.send("Tabela de usuários verificada ou criada com sucesso.");
+                const newTablePoem = yield PoemModel_1.default.checkAndCreateTable();
+                res.status(201).json({ message: "Tabela poemas criada/verificada com sucesso" });
             }
             catch (err) {
                 console.error("Erro ao verificar/criar tabela de poems:", err);
-                res.status(500).send("Erro ao verificar/criar tabela de usuários.");
+                res
+                    .status(500)
+                    .json({ message: "Erro ao verificar/criar tabela de poemas." });
             }
         });
     }

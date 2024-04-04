@@ -19,4 +19,10 @@ const router = express_1.default.Router();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.checkAndCreateTable(req, res);
 }));
+router.get("/all", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield userController_1.default.takeAllUsers(req, res);
+}));
+router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield userController_1.default.createUser(req, res);
+}));
 exports.default = router;

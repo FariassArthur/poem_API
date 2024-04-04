@@ -23,8 +23,7 @@ class UserModel {
                 const tableExists = tableExistsQuery.rows[0].to_regclass !== null;
                 if (!tableExists) {
                     // Cria a tabela se ela não existir
-                    yield client
-                        .query(`
+                    yield client.query(`
           CREATE TABLE usuarios (
             id SERIAL PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
@@ -32,9 +31,7 @@ class UserModel {
             senha VARCHAR(100) NOT NULL,
             admin BOOLEAN DEFAULT FALSE
           )
-        `)
-                        .then(() => console.log("Tabela usuarios criada com sucesso"))
-                        .catch((err) => console.error(`Erro ao criar tabela usuarios: ${err}`));
+        `);
                     console.log("Tabela usuarios criada com sucesso.");
                 }
                 else {
@@ -45,6 +42,21 @@ class UserModel {
             catch (error) {
                 console.error("Erro ao verificar/criar tabela usuarios:", error);
                 throw error; // Propaga o erro para o controlador para tratamento adequado
+            }
+        });
+    }
+    static takeUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                const codeQuery = `SELECT * FROM usuarios`;
+                const result = yield client.query(codeQuery);
+                client.release();
+                return result.rows;
+            }
+            catch (err) {
+                console.error(`Erro na solicitação de usuários: ${err}`);
+                throw err;
             }
         });
     }

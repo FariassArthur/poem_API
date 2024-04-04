@@ -19,12 +19,32 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield UserModel_1.default.checkAndCreateTable();
-                res.send("Tabela de usuários verificada ou criada com sucesso.");
+                res
+                    .status(201)
+                    .json({ message: "Tabela usuários criada/verificada com sucesso" });
             }
             catch (err) {
                 console.error("Erro ao verificar/criar tabela de usuários:", err);
-                res.status(500).send("Erro ao verificar/criar tabela de usuários.");
+                res
+                    .status(500)
+                    .json({ message: "Erro ao verificar/criar tabela de usuários." });
             }
+        });
+    }
+    static takeAllUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield UserModel_1.default.takeUsers();
+                res.status(200).json({ data });
+            }
+            catch (err) {
+                res.status(404).json({ message: err });
+            }
+        });
+    }
+    static createUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            res.send("funciona");
         });
     }
 }

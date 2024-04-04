@@ -7,5 +7,11 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   await UserController.checkAndCreateTable(req, res);
 });
+router.get("/all", async (req, res) => {
+  await UserController.takeAllUsers(req, res);
+});
+router.post("/create", async (req, res) => {
+  await UserController.createUser(req, res);
+});
 
 export default router;

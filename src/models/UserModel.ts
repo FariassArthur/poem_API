@@ -1,7 +1,7 @@
 import pool from "../db/conn";
 
 // Modelo de usuário
-interface usuario {
+interface Usuario {
   id?: number;
   nome: string;
   email: string;
@@ -22,9 +22,7 @@ export default class UserModel {
 
       if (!tableExists) {
         // Cria a tabela se ela não existir
-        await client
-          .query(
-            `
+        await client.query(`
           CREATE TABLE usuarios (
             id SERIAL PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
@@ -32,12 +30,7 @@ export default class UserModel {
             senha VARCHAR(100) NOT NULL,
             admin BOOLEAN DEFAULT FALSE
           )
-        `
-          )
-          .then(() => console.log("Tabela usuarios criada com sucesso"))
-          .catch((err) =>
-            console.error(`Erro ao criar tabela usuarios: ${err}`)
-          );
+        `);
         console.log("Tabela usuarios criada com sucesso.");
       } else {
         console.log("Tabela usuarios já existe.");
@@ -47,6 +40,21 @@ export default class UserModel {
     } catch (error) {
       console.error("Erro ao verificar/criar tabela usuarios:", error);
       throw error; // Propaga o erro para o controlador para tratamento adequado
+    }
+  }
+
+  static async takeUsers(): Promise<Usuario[]> {
+    try {
+      const client = await pool.connect();
+      const codeQuery: string = `SELECT * FROM usuarios`;
+
+      const result = await client.query(codeQuery);
+      client.release();
+
+      return result.rows;
+    } catch (err) {
+      console.error(`Erro na solicitação de usuários: ${err}`);
+      throw err;
     }
   }
 }

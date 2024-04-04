@@ -9,11 +9,13 @@ import PoemModel from "../models/PoemModel";
 export default class PoemController {
   static async checkAndCreateTablePoem(req: Request, res: Response) {
     try {
-      await PoemModel.checkAndCreateTable();
-      res.send("Tabela de usuários verificada ou criada com sucesso.");
+      const newTablePoem = await PoemModel.checkAndCreateTable();
+      res.status(201).json({ message: "Tabela poemas criada/verificada com sucesso" });
     } catch (err) {
       console.error("Erro ao verificar/criar tabela de poems:", err);
-      res.status(500).send("Erro ao verificar/criar tabela de usuários.");
+      res
+        .status(500)
+        .json({ message: "Erro ao verificar/criar tabela de poemas." });
     }
   }
 }
