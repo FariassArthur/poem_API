@@ -13,5 +13,7 @@ router.get("/all", async (req, res) => {
 router.post("/create", async (req, res) => {
   await UserController.createUser(req, res);
 });
+router.get("/:id", async(req, res) => {
+})
 
 export default router;

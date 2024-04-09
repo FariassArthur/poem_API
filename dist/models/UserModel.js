@@ -60,5 +60,19 @@ class UserModel {
             }
         });
     }
+    static createUser(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                const codeQuery = `INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)`;
+                const values = [user.nome, user.email, user.senha];
+                yield client.query(codeQuery, values);
+                client.release();
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
 }
 exports.default = UserModel;

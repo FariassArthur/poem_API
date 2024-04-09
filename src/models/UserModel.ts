@@ -57,4 +57,17 @@ export default class UserModel {
       throw err;
     }
   }
+
+  static async createUser(user: Usuario): Promise<void> {
+    try {
+      const client = await pool.connect();
+      const codeQuery: string = `INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)`;
+      const values: string[] = [user.nome, user.email, user.senha];
+
+      await client.query(codeQuery, values);
+      client.release();
+    } catch (err) {
+      throw err;
+    }
+  }
 }
