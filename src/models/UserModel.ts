@@ -10,6 +10,27 @@ interface Usuario {
 }
 
 export default class UserModel {
+  static async takeIdUser(name: string) {
+    try {
+      const client = await pool.connect();
+      const codeQuery: string = `SELECT id FROM usuarios WHERE nome = $1`; // Corrigindo para "nome"
+      const values: string[] = [name];
+
+      const data = await client.query(codeQuery, values);
+      client.release();
+
+      if (data.rows.length === 0) {
+        // Se nenhum usuário for encontrado com o nome especificado, retorne null ou outro valor adequado
+        return null;
+      }
+
+      // Retorne o ID do usuário encontrado
+      return data.rows[0].id;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   static async checkAndCreateTable(): Promise<void> {
     try {
       const client = await pool.connect();
@@ -63,6 +84,34 @@ export default class UserModel {
       const client = await pool.connect();
       const codeQuery: string = `INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)`;
       const values: string[] = [user.nome, user.email, user.senha];
+
+      await client.query(codeQuery, values);
+      client.release();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  static async takeOneUser(id: string, email?: string) {
+    if (email) {
+      try {
+        const client = await pool.connect();
+        const codeQuery: string = `SELECT * from usuarios WHERE email = $1`;
+        const values: string[] = [email];
+
+        const result = await client.query(codeQuery, values);
+        client.release();
+
+        return result.rows;
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    try {
+      const client = await pool.connect();
+      const codeQuery: string = `SELECT * from usuarios WHERE id = $1`;
+      const values: string[] = [id];
 
       await client.query(codeQuery, values);
       client.release();
