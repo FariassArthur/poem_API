@@ -14,6 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const conn_1 = __importDefault(require("../db/conn"));
 class UserModel {
+    static takeIdUser(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                const codeQuery = `SELECT id FROM usuarios WHERE nome = $1`; // Corrigindo para "nome"
+                const values = [name];
+                const data = yield client.query(codeQuery, values);
+                client.release();
+                if (data.rows.length === 0) {
+                    // Se nenhum usuário for encontrado com o nome especificado, retorne null ou outro valor adequado
+                    return null;
+                }
+                // Retorne o ID do usuário encontrado
+                return data.rows[0].id;
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
     static checkAndCreateTable() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -66,6 +86,47 @@ class UserModel {
                 const client = yield conn_1.default.connect();
                 const codeQuery = `INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)`;
                 const values = [user.nome, user.email, user.senha];
+                yield client.query(codeQuery, values);
+                client.release();
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
+    static takeOneUser(id, email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                let codeQuery;
+                let values;
+                if (email) {
+                    codeQuery = `SELECT * FROM usuarios WHERE email = $1`;
+                    values = [email];
+                }
+                else {
+                    codeQuery = `SELECT * FROM usuarios WHERE id = $1`;
+                    values = [id];
+                }
+                const result = yield client.query(codeQuery, values);
+                client.release();
+                if (result.rows.length === 0) {
+                    return null; // Retorna null se nenhum usuário for encontrado
+                }
+                // Retorna o primeiro usuário encontrado
+                return result.rows[0];
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
+    static UpdateUser(id, name, email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                let codeQuery = `UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4`;
+                let values = [name, email, password, id];
                 yield client.query(codeQuery, values);
                 client.release();
             }

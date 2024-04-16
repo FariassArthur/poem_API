@@ -1,24 +1,10 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-
-// Defina o tipo para o usuário autenticado
-interface AuthenticatedUser {
-  id: number;
-}
-
-// Estenda o tipo Request para adicionar a propriedade user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: AuthenticatedUser;
-    }
-  }
-}
 
 const secretKey = process.env.JWT_SECRET || "";
 
 export const authenticateJWT = (
-  req: Request & { user: AuthenticatedUser },
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -29,7 +15,7 @@ export const authenticateJWT = (
       if (err) {
         return res.sendStatus(403);
       }
-      req.user = decoded as AuthenticatedUser;
+      req.user = decoded as JwtPayload;
       next();
     });
   } else {

@@ -103,27 +103,38 @@ export default class UserController {
     }
   }
 
-  static async userAtt(req: Request & {user: {id: number}}, res: Response) {
-    const id = req.user.id;
+  static async userAtt(
+    req: Request,
+    res: Response
+  ) {
+    // Verifica se id está definido
+    const user = req.user
+    
+    if (!user || user.id === undefined) {
+      return res.status(400).json({ message: "ID do usuário não fornecido" });
+    }
+
+    const id = user.id;
     const name = req.body.name; // corrigindo para req.body.nome
     const email = req.body.email; // corrigindo para req.body.email
     const password = req.body.password; // corrigindo para req.body.senha
-  
+
+
     try {
       const user = await UserModel.takeOneUser(id.toString());
 
       const salt = process.env.BCRYPT_SALT || "";
 
       const passwordHashed = await bcrypt.hash(password, parseInt(salt));
-  
-      if (!user) {
+
+      if (!id) {
         return res.status(404).json({
           message: "O usuário solicitado não foi encontrado no servidor",
         });
       }
-  
+
       await UserModel.UpdateUser(id.toString(), name, email, passwordHashed);
-  
+
       res.status(200).json({ message: "Usuário atualizado com sucesso" });
     } catch (err) {
       res
@@ -131,7 +142,6 @@ export default class UserController {
         .json({ message: "Não foi possível atualizar o usuário", error: err });
     }
   }
-  
 
   static async userLogin(req: Request, res: Response) {
     const password = req.body.password;
