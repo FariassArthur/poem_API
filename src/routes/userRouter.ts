@@ -1,6 +1,7 @@
 // router.ts
 import express from "express";
 import UserController from "../controllers/userController";
+import { authenticateJWT } from "../middlewares/AuthJwt";
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get("/login", async (req, res) => {
 router.post("/create", async (req, res) => {
   await UserController.createUser(req, res);
 });
-router.post("/update", async (req, res) => {
+router.post("/update", authenticateJWT, async (req, res) => {
   await UserController.userAtt(req, res)
 });
 router.get("/id", async (req, res) => {

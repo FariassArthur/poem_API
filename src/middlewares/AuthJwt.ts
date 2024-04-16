@@ -1,10 +1,24 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-const secretKey = process.env.JWT_SECRET || ""; // Substitua por uma chave secreta real
+// Defina o tipo para o usuário autenticado
+interface AuthenticatedUser {
+  id: number;
+}
+
+// Estenda o tipo Request para adicionar a propriedade user
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AuthenticatedUser;
+    }
+  }
+}
+
+const secretKey = process.env.JWT_SECRET || "";
 
 export const authenticateJWT = (
-  req: Request & { user: any },
+  req: Request & { user: AuthenticatedUser },
   res: Response,
   next: NextFunction
 ) => {
@@ -15,10 +29,10 @@ export const authenticateJWT = (
       if (err) {
         return res.sendStatus(403);
       }
-      req.user = decoded;
+      req.user = decoded as AuthenticatedUser;
       next();
     });
   } else {
-    res.sendStatus(401).json({message: "Autenticação do token falhou"});
+    res.status(401).json({ message: "Autenticação do token falhou" });
   }
 };

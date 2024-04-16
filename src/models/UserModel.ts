@@ -92,26 +92,47 @@ export default class UserModel {
     }
   }
 
-  static async takeOneUser(id: string, email?: string) {
-    if (email) {
-      try {
-        const client = await pool.connect();
-        const codeQuery: string = `SELECT * from usuarios WHERE email = $1`;
-        const values: string[] = [email];
-
-        const result = await client.query(codeQuery, values);
-        client.release();
-
-        return result.rows;
-      } catch (err) {
-        throw err;
-      }
-    }
-
+  static async takeOneUser(
+    id: string,
+    email?: string
+  ): Promise<Usuario | null> {
     try {
       const client = await pool.connect();
-      const codeQuery: string = `SELECT * from usuarios WHERE id = $1`;
-      const values: string[] = [id];
+      let codeQuery: string;
+      let values: string[];
+
+      if (email) {
+        codeQuery = `SELECT * FROM usuarios WHERE email = $1`;
+        values = [email];
+      } else {
+        codeQuery = `SELECT * FROM usuarios WHERE id = $1`;
+        values = [id];
+      }
+
+      const result = await client.query(codeQuery, values);
+      client.release();
+
+      if (result.rows.length === 0) {
+        return null; // Retorna null se nenhum usuário for encontrado
+      }
+
+      // Retorna o primeiro usuário encontrado
+      return result.rows[0] as Usuario;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  static async UpdateUser(
+    id: string,
+    name: string,
+    email: string,
+    password: string
+  ) {
+    try {
+      const client = await pool.connect();
+      let codeQuery: string = `UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4`;
+      let values: string[] = [name, email, password, id];
 
       await client.query(codeQuery, values);
       client.release();
