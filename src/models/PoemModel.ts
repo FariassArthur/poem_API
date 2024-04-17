@@ -28,6 +28,7 @@ export default class PoemModel {
             id SERIAL PRIMARY KEY,
             title VARCHAR(50) NOT NULL,
             content TEXT NOT NULL,
+            image_url VARCHAR(255),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             userId INTEGER REFERENCES public.usuarios(id)
@@ -56,9 +57,36 @@ export default class PoemModel {
     image?: string
   ) {
     try {
-      
+      const client = await pool.connect();
+      let codeQuery: string;
+      let values: string[];
+      if (image) {
+        codeQuery = `INSERT INTO poems (title, content, userid, image_url) VALUES ($1, $2, $3, $4)`;
+        values = [title, content, userId, image];
+      } else {
+        codeQuery = `INSERT INTO poems (title, content, userid) VALUES ($1, $2, $3)`;
+        values = [title, content, userId];
+      }
+      await client.query(codeQuery, values);
+      client.release;
     } catch (err) {
-      
+      throw err;
+    }
+  }
+
+  static async userPoems(id: string) {
+    try {
+      const client = await pool.connect()
+
+      const codeQuery: string = `SELECT * FROM poems WHERE userid = $1`
+      const values: string[] = [id]
+
+      const data = await client.query(codeQuery, values)
+
+      return data.rows
+      client.release()
+    } catch (error) {
+      throw error;
     }
   }
 }

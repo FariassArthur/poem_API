@@ -39,9 +39,24 @@ export default class PoemController {
         await PoemModel.create( id, title, content)
       }
       
-      res.status(201).json({message: "Usuário criado com sucesso"})
+      res.status(201).json({message: "Poema criado com sucesso"})
     } catch (err) {
       res.status(400).json({message: "não foi possível criar o poema", error: err})
+    }
+  }
+
+  static async takeUserPoems(req: Request, res: Response){
+    const user = req.user
+
+    if (!user || user.id === undefined) {
+      return res.status(400).json({ message: "ID do usuário não fornecido" });
+    }
+
+    try {
+      const data = await PoemModel.userPoems(user.id)
+      res.status(200).json({data})
+    } catch (err) {
+      res.status(404).json({message: "Poema não encontrado", error: err})
     }
   }
 }
