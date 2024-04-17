@@ -95,7 +95,13 @@ export default class UserController {
     try {
       const user = await UserModel.takeOneUser(id);
 
-      res.status(200).json({ user });
+      if (user) {
+        res.status(200).json({ user });
+      } else {
+        res
+          .status(404)
+          .json({ message: "Usuário não foi encontrado no sistema" });
+      }
     } catch (err) {
       res
         .status(404)
@@ -103,13 +109,10 @@ export default class UserController {
     }
   }
 
-  static async userAtt(
-    req: Request,
-    res: Response
-  ) {
+  static async userAtt(req: Request, res: Response) {
     // Verifica se id está definido
-    const user = req.user
-    
+    const user = req.user;
+
     if (!user || user.id === undefined) {
       return res.status(400).json({ message: "ID do usuário não fornecido" });
     }
@@ -118,7 +121,6 @@ export default class UserController {
     const name = req.body.name; // corrigindo para req.body.nome
     const email = req.body.email; // corrigindo para req.body.email
     const password = req.body.password; // corrigindo para req.body.senha
-
 
     try {
       const user = await UserModel.takeOneUser(id.toString());
@@ -168,6 +170,27 @@ export default class UserController {
     } catch (err) {
       console.error("Erro ao fazer login:", err);
       res.status(500).json({ message: "Erro ao fazer login", error: err });
+    }
+  }
+
+  static async userDelete(req: Request, res: Response) {
+    // Verifica se id está definido
+    const user = req.user;
+
+    if (!user || user.id === undefined) {
+      return res.status(400).json({ message: "ID do usuário não fornecido" });
+    }
+
+    const id = user.id;
+
+    try {
+      await UserModel.deleteUser(id);
+
+      res.status(200).json({ message: "usuário deletado" });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Não foi possível deletar o usuário", error: err });
     }
   }
 }

@@ -14,9 +14,15 @@ router.get("/login", async (req, res) => {
   await UserController.userLogin(req, res);
 });
 
+router.get("/logout")
+
 router.post("/create", async (req, res) => {
   await UserController.createUser(req, res);
 });
+
+router.post("/delete", authenticateJWT, async (req, res) => {
+  await UserController.userDelete(req, res);
+})
 
 // Use a interface AuthMiddleware para tipar o middleware
 router.post("/update", authenticateJWT, async (req, res) => {

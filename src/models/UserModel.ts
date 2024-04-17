@@ -140,4 +140,17 @@ export default class UserModel {
       throw err;
     }
   }
+
+  static async deleteUser(id: string) {
+    try {
+      const client = await pool.connect();
+      let codeQuery: string = `DELETE FROM usuarios WHERE id = $1`;
+      let values: string[] = [id];
+
+      await client.query(codeQuery, values);
+      client.release();
+    } catch (err) {
+      throw err;
+    }
+  }
 }
