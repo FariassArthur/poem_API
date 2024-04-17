@@ -18,4 +18,30 @@ export default class PoemController {
         .json({ message: "Erro ao verificar/criar tabela de poemas." });
     }
   }
+
+  static async poemCreate(req: Request, res: Response) {
+    const user = req.user
+
+    if (!user || user.id === undefined) {
+      return res.status(400).json({ message: "ID do usuário não fornecido" });
+    }
+
+    const id = user.id
+    const title = req.body.title
+    const content = req.body.content
+    const image = req.body.image
+
+    try {
+      if(image) {
+        await PoemModel.create(id, title, content, image)
+
+      } else {
+        await PoemModel.create( id, title, content)
+      }
+      
+      res.status(201).json({message: "Usuário criado com sucesso"})
+    } catch (err) {
+      res.status(400).json({message: "não foi possível criar o poema", error: err})
+    }
+  }
 }

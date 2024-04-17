@@ -45,7 +45,20 @@ export default class PoemModel {
       client.release();
     } catch (err) {
       console.error(`Erro ao verificar ou criar tabela poems: ${err}`);
-      throw err
+      throw err;
+    }
+  }
+
+  static async create(
+    userId: string,
+    title: string,
+    content: string,
+    image?: string
+  ) {
+    try {
+      
+    } catch (err) {
+      
     }
   }
 }
