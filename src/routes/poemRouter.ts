@@ -17,4 +17,12 @@ router.get("/poemuser", authenticateJWT, async (req, res) => {
   await PoemController.takeUserPoems(req, res);
 })
 
+router.get("/delete/:id", authenticateJWT, async (req, res) => {
+  await PoemController.deletePoem(req, res)
+})
+
+router.get("/:id") //pegar poema por id
+
+router.post("/update/:id")
+
 export default router;

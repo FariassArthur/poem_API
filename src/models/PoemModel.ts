@@ -68,7 +68,7 @@ export default class PoemModel {
         values = [title, content, userId];
       }
       await client.query(codeQuery, values);
-      client.release;
+      client.release();
     } catch (err) {
       throw err;
     }
@@ -84,6 +84,20 @@ export default class PoemModel {
       const data = await client.query(codeQuery, values)
 
       return data.rows
+      client.release()
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async delete(id: string) {
+    try {
+      const client = await pool.connect()
+
+      const codeQuery: string = `DELETE FROM poems WHERE id = $1`
+      const values: string[] = [id]
+
+      await client.query(codeQuery, values)
       client.release()
     } catch (error) {
       throw error;
