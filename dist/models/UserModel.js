@@ -135,5 +135,19 @@ class UserModel {
             }
         });
     }
+    static deleteUser(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                let codeQuery = `DELETE FROM usuarios WHERE id = $1`;
+                let values = [id];
+                yield client.query(codeQuery, values);
+                client.release();
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
 }
 exports.default = UserModel;
