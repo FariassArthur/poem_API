@@ -25,6 +25,9 @@ router.get("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* (
 router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.createUser(req, res);
 }));
+router.post("/delete", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield userController_1.default.userDelete(req, res);
+}));
 // Use a interface AuthMiddleware para tipar o middleware
 router.post("/update", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.userAtt(req, res);

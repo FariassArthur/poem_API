@@ -101,7 +101,14 @@ class UserController {
             const id = req.params.id;
             try {
                 const user = yield UserModel_1.default.takeOneUser(id);
-                res.status(200).json({ user });
+                if (user) {
+                    res.status(200).json({ user });
+                }
+                else {
+                    res
+                        .status(404)
+                        .json({ message: "Usuário não foi encontrado no sistema" });
+                }
             }
             catch (err) {
                 res
@@ -113,18 +120,19 @@ class UserController {
     static userAtt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             // Verifica se id está definido
-            const id = req.user.id;
+            const user = req.user;
+            if (!user || user.id === undefined) {
+                return res.status(400).json({ message: "ID do usuário não fornecido" });
+            }
+            const id = user.id;
             const name = req.body.name; // corrigindo para req.body.nome
             const email = req.body.email; // corrigindo para req.body.email
             const password = req.body.password; // corrigindo para req.body.senha
-            if (typeof id === "undefined") {
-                return res.status(400).json({ message: "ID do usuário não fornecido" });
-            }
             try {
                 const user = yield UserModel_1.default.takeOneUser(id.toString());
                 const salt = process.env.BCRYPT_SALT || "";
                 const passwordHashed = yield bcrypt_1.default.hash(password, parseInt(salt));
-                if (!user) {
+                if (!id) {
                     return res.status(404).json({
                         message: "O usuário solicitado não foi encontrado no servidor",
                     });
@@ -160,6 +168,25 @@ class UserController {
             catch (err) {
                 console.error("Erro ao fazer login:", err);
                 res.status(500).json({ message: "Erro ao fazer login", error: err });
+            }
+        });
+    }
+    static userDelete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Verifica se id está definido
+            const user = req.user;
+            if (!user || user.id === undefined) {
+                return res.status(400).json({ message: "ID do usuário não fornecido" });
+            }
+            const id = user.id;
+            try {
+                yield UserModel_1.default.deleteUser(id);
+                res.status(200).json({ message: "usuário deletado" });
+            }
+            catch (err) {
+                res
+                    .status(500)
+                    .json({ message: "Não foi possível deletar o usuário", error: err });
             }
         });
     }

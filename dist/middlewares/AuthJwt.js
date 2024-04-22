@@ -12,7 +12,7 @@ const authenticateJWT = (req, res, next) => {
     if (token) {
         jsonwebtoken_1.default.verify(token, secretKey, (err, decoded) => {
             if (err) {
-                return res.sendStatus(403);
+                return res.sendStatus(403).json({ message: "Usuário não tem permissão" });
             }
             req.user = decoded;
             next();
