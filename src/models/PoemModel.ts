@@ -44,6 +44,17 @@ export default class PoemModel {
         console.log("Tabela poems já existe");
       }
 
+      client.release();
+    } catch (err) {
+      console.error(`Erro ao verificar ou criar tabela poems: ${err}`);
+      throw err;
+    }
+  }
+
+  static async checkAndCreateTableLikes() {
+    try {
+      const client = await pool.connect();
+
       // Verifica se a tabela likes existe
       const tableLikesExistsQuery = await client.query(
         `SELECT to_regclass('public.likes')`
@@ -58,7 +69,7 @@ export default class PoemModel {
         CREATE TABLE likes (
             id SERIAL PRIMARY KEY,
             poem_id INTEGER NOT NULL REFERENCES poems(id),
-            user_id INTEGER NOT NULL REFERENCES users(id),
+            user_id INTEGER NOT NULL REFERENCES usuarios(id),
             UNIQUE(poem_id, user_id)
         )
         `
@@ -67,10 +78,7 @@ export default class PoemModel {
       } else {
         console.log("Tabela likes já existe");
       }
-
-      client.release();
     } catch (err) {
-      console.error(`Erro ao verificar ou criar tabela poems: ${err}`);
       throw err;
     }
   }
@@ -136,8 +144,9 @@ export default class PoemModel {
       const codeQuery: string = `SELECT * FROM poems WHERE id = $1`;
       const values: string[] = [id];
 
-      await client.query(codeQuery, values);
+      const data = await client.query(codeQuery, values);
       client.release();
+      return data.rows[0];
     } catch (err) {
       throw err;
     }

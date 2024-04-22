@@ -5,9 +5,13 @@ import { authenticateJWT } from "../middlewares/AuthJwt";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   await PoemController.checkAndCreateTablePoem(req, res);
 });
+
+router.post("/likes", async (req, res) => {
+  await PoemController.checkAndCreateTableLikes(req, res)
+})
 
 router.post("/create", authenticateJWT, async (req, res) => {
   await PoemController.poemCreate(req, res);
