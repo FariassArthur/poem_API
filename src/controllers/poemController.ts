@@ -74,6 +74,70 @@ export default class PoemController {
           .status(400)
           .json({ message: "Não foi possível deletar o poema", error: err });
       }
+    } else {
+      res.status(400).json({ message: "ID não foi informado" });
+    }
+  }
+
+  static async takePoemId(req: Request, res: Response) {
+    const id: string = req.params.id;
+
+    if (id) {
+      try {
+        const data = await PoemModel.getById(id);
+        res.status(200).json({ data });
+      } catch (err) {
+        res
+          .status(404)
+          .json({ message: "Não foi possível encontrar o poema", error: err });
+      }
+    }
+  }
+
+  static async updatePoem(req: Request, res: Response) {
+    const id: string = req.body.id;
+    const title: string = req.body.id;
+    const content: string = req.body.id;
+    const image_url: string = req.body.id;
+
+    try {
+      const data = await PoemModel.updatePoem(id, title, content, image_url);
+      res.status(200).json({ message: "Poema atualizado", data: { data } });
+    } catch (err) {
+      res
+        .status(404)
+        .json({ message: "Não foi possível atualizar o poema", error: err });
+    }
+  }
+
+  static async likePoem(req: Request, res: Response) {
+    const poemid = req.params.id;
+    const user = req.user;
+
+    if (!user || user.id === undefined) {
+      return res.status(400).json({ message: "ID do usuário não fornecido" });
+    }
+
+    try {
+      await PoemModel.like(poemid, user.id);
+      res.status(200).json({ message: "Poema recebeu o like" });
+    } catch (err) {
+      res
+        .status(404)
+        .json({ message: "Não foi possível dar like no poema", error: err });
+    }
+  }
+
+  static async numberOfLikes(req: Request, res: Response) {
+    const id = req.params.id
+
+    try {
+      const data = await PoemModel.getLikes(id)
+      res.status(200).json({message: "Há likes no sistema"})
+    } catch (err) {
+      res
+        .status(404)
+        .json({ message: "Não foi possível receber o poema", error: err });
     }
   }
 }

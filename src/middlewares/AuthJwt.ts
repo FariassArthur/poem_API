@@ -13,7 +13,7 @@ export const authenticateJWT = (
   if (token) {
     jwt.verify(token, secretKey, (err, decoded) => {
       if (err) {
-        return res.sendStatus(403);
+        return res.sendStatus(403).json({message: "Usuário não tem permissão"});
       }
       req.user = decoded as JwtPayload;
       next();

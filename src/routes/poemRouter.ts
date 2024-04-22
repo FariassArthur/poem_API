@@ -15,14 +15,26 @@ router.post("/create", authenticateJWT, async (req, res) => {
 
 router.get("/poemuser", authenticateJWT, async (req, res) => {
   await PoemController.takeUserPoems(req, res);
-})
+});
 
 router.get("/delete/:id", authenticateJWT, async (req, res) => {
-  await PoemController.deletePoem(req, res)
-})
+  await PoemController.deletePoem(req, res);
+});
 
-router.get("/:id") //pegar poema por id
+router.get("/:id", authenticateJWT, async (req, res) => {
+  await PoemController.takePoemId(req, res);
+}); //pegar poema por id
 
-router.post("/update/:id")
+router.post("/update/:id", authenticateJWT, async (req, res) => {
+  await PoemController.updatePoem(req, res);
+});
+
+router.post("/like/:id", authenticateJWT, async (req, res) => {
+  await PoemController.likePoem(req, res);
+});
+
+router.get("/likes/:id", async (req, res) => {
+  await PoemController.numberOfLikes(req, res);
+});
 
 export default router;
