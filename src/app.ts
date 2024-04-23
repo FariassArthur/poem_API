@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Cors = configura as requisições por fora que são aceitas
 const corsOptions = {
-  origin: "*",
+  origin: "http://localhost:5173",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
