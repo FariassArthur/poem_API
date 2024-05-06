@@ -70,11 +70,14 @@ export default class UserController {
 
       const passwordHashed = await bcrypt.hash(pass, parseInt(salt));
       const id = await UserModel.takeIdUser(name);
+      if (id) {
+        res.status(404).json({ message: "Usuário já existe" });
+      }
 
       await UserModel.createUser({
-        nome: name,
+        name: name,
         email: email,
-        senha: passwordHashed,
+        password: passwordHashed,
       });
 
       res.status(201).json({
@@ -120,7 +123,7 @@ export default class UserController {
     const id = user.id;
     const name = req.body.name; // corrigindo para req.body.nome
     const email = req.body.email; // corrigindo para req.body.email
-    const password = req.body.password; // corrigindo para req.body.senha
+    const password = req.body.password; // corrigindo para req.body.password
 
     try {
       const user = await UserModel.takeOneUser(id.toString());
@@ -156,7 +159,7 @@ export default class UserController {
         return res.status(404).json({ message: "Usuário não encontrado" });
       }
 
-      const isPasswordValid = await bcrypt.compare(password, user.senha);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (!isPasswordValid) {
         return res.status(401).json({ message: "Credenciais inválidas" });
