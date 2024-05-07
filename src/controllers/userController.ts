@@ -70,9 +70,6 @@ export default class UserController {
 
       const passwordHashed = await bcrypt.hash(pass, parseInt(salt));
       const id = await UserModel.takeIdUser(name);
-      if (id) {
-        res.status(404).json({ message: "Usuário já existe" });
-      }
 
       await UserModel.createUser({
         name: name,
@@ -80,11 +77,13 @@ export default class UserController {
         password: passwordHashed,
       });
 
-      res.status(201).json({
-        message: "Usuário criado",
-        id_user: id,
-        token: generateToken(id),
-      });
+      if (id) {
+        res.status(201).json({
+          message: "Usuário criado",
+          id_user: id,
+          token: generateToken(id),
+        });
+      }
     } catch (err) {
       res
         .status(404)
