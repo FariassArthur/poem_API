@@ -149,8 +149,8 @@ class UserController {
     }
     static userLogin(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const password = req.body.password;
             const email = req.body.email;
+            const password = req.body.password;
             try {
                 const user = yield UserModel_1.default.takeOneUser("", email);
                 if (!user) {
