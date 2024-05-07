@@ -18,12 +18,12 @@ class UserModel {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield conn_1.default.connect();
-                const codeQuery = `SELECT id FROM usuarios WHERE nome = $1`; // Corrigindo para "nome"
+                const codeQuery = `SELECT id FROM users WHERE name = $1`; // Corrigindo para "name"
                 const values = [name];
                 const data = yield client.query(codeQuery, values);
                 client.release();
                 if (data.rows.length === 0) {
-                    // Se nenhum usuário for encontrado com o nome especificado, retorne null ou outro valor adequado
+                    // Se nenhum usuário for encontrado com o name especificado, retorne null ou outro valor adequado
                     return null;
                 }
                 // Retorne o ID do usuário encontrado
@@ -39,28 +39,28 @@ class UserModel {
             try {
                 const client = yield conn_1.default.connect();
                 // Verifica se a tabela já existe
-                const tableExistsQuery = yield client.query(`SELECT to_regclass('public.usuarios')`);
+                const tableExistsQuery = yield client.query(`SELECT to_regclass('public.users')`);
                 const tableExists = tableExistsQuery.rows[0].to_regclass !== null;
                 if (!tableExists) {
                     // Cria a tabela se ela não existir
                     yield client.query(`
-          CREATE TABLE usuarios (
+          CREATE TABLE users (
             id SERIAL PRIMARY KEY,
-            nome VARCHAR(100) NOT NULL,
+            name VARCHAR(100) NOT NULL,
             email VARCHAR(100) UNIQUE NOT NULL,
-            senha VARCHAR(100) NOT NULL,
+            password VARCHAR(100) NOT NULL,
             admin BOOLEAN DEFAULT FALSE
           )
         `);
-                    console.log("Tabela usuarios criada com sucesso.");
+                    console.log("Tabela users criada com sucesso.");
                 }
                 else {
-                    console.log("Tabela usuarios já existe.");
+                    console.log("Tabela users já existe.");
                 }
                 client.release();
             }
             catch (error) {
-                console.error("Erro ao verificar/criar tabela usuarios:", error);
+                console.error("Erro ao verificar/criar tabela users:", error);
                 throw error; // Propaga o erro para o controlador para tratamento adequado
             }
         });
@@ -69,7 +69,7 @@ class UserModel {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield conn_1.default.connect();
-                const codeQuery = `SELECT * FROM usuarios`;
+                const codeQuery = `SELECT * FROM users`;
                 const result = yield client.query(codeQuery);
                 client.release();
                 return result.rows;
@@ -84,8 +84,8 @@ class UserModel {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield conn_1.default.connect();
-                const codeQuery = `INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)`;
-                const values = [user.nome, user.email, user.senha];
+                const codeQuery = `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`;
+                const values = [user.name, user.email, user.password];
                 yield client.query(codeQuery, values);
                 client.release();
             }
@@ -101,11 +101,11 @@ class UserModel {
                 let codeQuery;
                 let values;
                 if (email) {
-                    codeQuery = `SELECT * FROM usuarios WHERE email = $1`;
+                    codeQuery = `SELECT * FROM users WHERE email = $1`;
                     values = [email];
                 }
                 else {
-                    codeQuery = `SELECT * FROM usuarios WHERE id = $1`;
+                    codeQuery = `SELECT * FROM users WHERE id = $1`;
                     values = [id];
                 }
                 const result = yield client.query(codeQuery, values);
@@ -125,7 +125,7 @@ class UserModel {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield conn_1.default.connect();
-                let codeQuery = `UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4`;
+                let codeQuery = `UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4`;
                 let values = [name, email, password, id];
                 yield client.query(codeQuery, values);
                 client.release();
@@ -139,7 +139,7 @@ class UserModel {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield conn_1.default.connect();
-                let codeQuery = `DELETE FROM usuarios WHERE id = $1`;
+                let codeQuery = `DELETE FROM users WHERE id = $1`;
                 let values = [id];
                 yield client.query(codeQuery, values);
                 client.release();

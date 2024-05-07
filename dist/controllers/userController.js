@@ -78,10 +78,13 @@ class UserController {
                 const salt = process.env.BCRYPT_SALT || "";
                 const passwordHashed = yield bcrypt_1.default.hash(pass, parseInt(salt));
                 const id = yield UserModel_1.default.takeIdUser(name);
+                if (id) {
+                    res.status(404).json({ message: "Usuário já existe" });
+                }
                 yield UserModel_1.default.createUser({
-                    nome: name,
+                    name: name,
                     email: email,
-                    senha: passwordHashed,
+                    password: passwordHashed,
                 });
                 res.status(201).json({
                     message: "Usuário criado",
@@ -127,7 +130,7 @@ class UserController {
             const id = user.id;
             const name = req.body.name; // corrigindo para req.body.nome
             const email = req.body.email; // corrigindo para req.body.email
-            const password = req.body.password; // corrigindo para req.body.senha
+            const password = req.body.password; // corrigindo para req.body.password
             try {
                 const user = yield UserModel_1.default.takeOneUser(id.toString());
                 const salt = process.env.BCRYPT_SALT || "";
@@ -156,7 +159,7 @@ class UserController {
                 if (!user) {
                     return res.status(404).json({ message: "Usuário não encontrado" });
                 }
-                const isPasswordValid = yield bcrypt_1.default.compare(password, user.senha);
+                const isPasswordValid = yield bcrypt_1.default.compare(password, user.password);
                 if (!isPasswordValid) {
                     return res.status(401).json({ message: "Credenciais inválidas" });
                 }
