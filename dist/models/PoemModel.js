@@ -31,7 +31,7 @@ class PoemModel {
             image_url VARCHAR(255),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            userId INTEGER REFERENCES public.usuarios(id)
+            userId INTEGER REFERENCES public.users(id)
         )
         `)
                         .then(() => console.log("Tabela poems inserida"))
@@ -61,7 +61,7 @@ class PoemModel {
         CREATE TABLE likes (
             id SERIAL PRIMARY KEY,
             poem_id INTEGER NOT NULL REFERENCES poems(id),
-            user_id INTEGER NOT NULL REFERENCES usuarios(id),
+            user_id INTEGER NOT NULL REFERENCES users(id),
             UNIQUE(poem_id, user_id)
         )
         `);
