@@ -19,7 +19,7 @@ const router = express_1.default.Router();
 router.get("/all", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.takeAllUsers(req, res);
 }));
-router.get("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.userLogin(req, res);
 }));
 router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -147,8 +147,8 @@ export default class UserController {
   }
 
   static async userLogin(req: Request, res: Response) {
-    const password = req.body.password;
     const email = req.body.email;
+    const password = req.body.password;
 
     try {
       const user = await UserModel.takeOneUser("", email);

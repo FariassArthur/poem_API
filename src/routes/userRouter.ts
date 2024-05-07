@@ -10,7 +10,7 @@ router.get("/all", async (req, res) => {
   await UserController.takeAllUsers(req, res);
 });
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   await UserController.userLogin(req, res);
 });
 
