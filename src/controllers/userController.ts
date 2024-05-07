@@ -69,21 +69,20 @@ export default class UserController {
       const salt = process.env.BCRYPT_SALT || "";
 
       const passwordHashed = await bcrypt.hash(pass, parseInt(salt));
-      const id = await UserModel.takeIdUser(name);
 
       await UserModel.createUser({
         name: name,
         email: email,
         password: passwordHashed,
       });
+      
+      const id = await UserModel.takeIdUser(name);
 
-      if (id) {
-        res.status(201).json({
-          message: "Usuário criado",
-          id_user: id,
-          token: generateToken(id),
-        });
-      }
+      res.status(201).json({
+        message: "Usuário criado",
+        id_user: id,
+        token: generateToken(id),
+      });
     } catch (err) {
       res
         .status(404)

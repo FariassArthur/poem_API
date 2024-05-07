@@ -77,19 +77,17 @@ class UserController {
             try {
                 const salt = process.env.BCRYPT_SALT || "";
                 const passwordHashed = yield bcrypt_1.default.hash(pass, parseInt(salt));
-                const id = yield UserModel_1.default.takeIdUser(name);
                 yield UserModel_1.default.createUser({
                     name: name,
                     email: email,
                     password: passwordHashed,
                 });
-                if (id) {
-                    res.status(201).json({
-                        message: "Usuário criado",
-                        id_user: id,
-                        token: generateToken(id),
-                    });
-                }
+                const id = yield UserModel_1.default.takeIdUser(name);
+                res.status(201).json({
+                    message: "Usuário criado",
+                    id_user: id,
+                    token: generateToken(id),
+                });
             }
             catch (err) {
                 res
