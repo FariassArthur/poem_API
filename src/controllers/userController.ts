@@ -75,7 +75,7 @@ export default class UserController {
         email: email,
         password: passwordHashed,
       });
-      
+
       const id = await UserModel.takeIdUser(name);
 
       res.status(201).json({
@@ -91,8 +91,15 @@ export default class UserController {
   }
 
   static async takeUser(req: Request, res: Response) {
-    const id = req.params.id;
+    
+    const user = req.user;
 
+    if (!user || user.id === undefined) {
+      return res.status(400).json({ message: "ID do usuário não fornecido" });
+    }
+
+    const id = user.id;
+    
     try {
       const user = await UserModel.takeOneUser(id);
 
@@ -124,8 +131,6 @@ export default class UserController {
     const password = req.body.password; // corrigindo para req.body.password
 
     try {
-      const user = await UserModel.takeOneUser(id.toString());
-
       const salt = process.env.BCRYPT_SALT || "";
 
       const passwordHashed = await bcrypt.hash(password, parseInt(salt));
@@ -136,9 +141,16 @@ export default class UserController {
         });
       }
 
-      await UserModel.UpdateUser(id.toString(), name, email, passwordHashed);
+      const user = await UserModel.UpdateUser(
+        id.toString(),
+        name,
+        email,
+        passwordHashed
+      );
 
-      res.status(200).json({ message: "Usuário atualizado com sucesso" });
+      res
+        .status(200)
+        .json({ message: "Usuário atualizado com sucesso", user: user });
     } catch (err) {
       res
         .status(404)

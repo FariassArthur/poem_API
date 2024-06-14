@@ -31,7 +31,7 @@ router.get("/id", async (req, res) => {
   await UserController.takeId(req, res);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/profile", authenticateJWT, async (req, res) => {
   await UserController.takeUser(req, res);
 });
 
