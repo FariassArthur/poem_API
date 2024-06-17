@@ -94,20 +94,35 @@ class UserModel {
             }
         });
     }
-    static takeOneUser(id, email) {
+    static takeOneUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const client = yield conn_1.default.connect();
                 let codeQuery;
                 let values;
-                if (email) {
-                    codeQuery = `SELECT * FROM users WHERE email = $1`;
-                    values = [email];
+                codeQuery = `SELECT * FROM users WHERE id = $1`;
+                values = [id];
+                const result = yield client.query(codeQuery, values);
+                client.release();
+                if (result.rows.length === 0) {
+                    return null; // Retorna null se nenhum usuário for encontrado
                 }
-                else {
-                    codeQuery = `SELECT * FROM users WHERE id = $1`;
-                    values = [id];
-                }
+                // Retorna o primeiro usuário encontrado
+                return result.rows[0];
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
+    static takeOneUserEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                let codeQuery;
+                let values;
+                codeQuery = `SELECT * FROM users WHERE email = $1`;
+                values = [email];
                 const result = yield client.query(codeQuery, values);
                 client.release();
                 if (result.rows.length === 0) {

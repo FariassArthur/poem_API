@@ -157,7 +157,7 @@ class UserController {
             const email = req.body.email;
             const password = req.body.password;
             try {
-                const user = yield UserModel_1.default.takeOneUser(email);
+                const user = yield UserModel_1.default.takeOneUserEmail(email);
                 if (!user) {
                     return res.status(404).json({ message: "Usuário não encontrado" });
                 }
