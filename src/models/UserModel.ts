@@ -92,22 +92,37 @@ export default class UserModel {
     }
   }
 
-  static async takeOneUser(
-    id?: number,
-    email?: string
-  ): Promise<Usuario | null> {
+  static async takeOneUser(id: number): Promise<Usuario | null> {
     try {
       const client = await pool.connect();
       let codeQuery: string;
-      let values: any;
+      let values;
 
-      if (email) {
-        codeQuery = `SELECT * FROM users WHERE email = $1`;
-        values = [email];
-      } else {
-        codeQuery = `SELECT * FROM users WHERE id = $1`;
-        values = [id];
+      codeQuery = `SELECT * FROM users WHERE id = $1`;
+      values = [id];
+
+      const result = await client.query(codeQuery, values);
+      client.release();
+
+      if (result.rows.length === 0) {
+        return null; // Retorna null se nenhum usuário for encontrado
       }
+
+      // Retorna o primeiro usuário encontrado
+      return result.rows[0] as Usuario;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  static async takeOneUserEmail(email: string): Promise<Usuario | null> {
+    try {
+      const client = await pool.connect();
+      let codeQuery: string;
+      let values;
+
+      codeQuery = `SELECT * FROM users WHERE email = $1`;
+      values = [email];
 
       const result = await client.query(codeQuery, values);
       client.release();
