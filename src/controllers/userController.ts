@@ -163,7 +163,7 @@ export default class UserController {
     const password = req.body.password;
 
     try {
-      const user = await UserModel.takeOneUser("", email);
+      const user = await UserModel.takeOneUser(email);
 
       if (!user) {
         return res.status(404).json({ message: "Usuário não encontrado" });

@@ -93,13 +93,13 @@ export default class UserModel {
   }
 
   static async takeOneUser(
-    id: string,
+    id?: number,
     email?: string
   ): Promise<Usuario | null> {
     try {
       const client = await pool.connect();
       let codeQuery: string;
-      let values: string[];
+      let values: any;
 
       if (email) {
         codeQuery = `SELECT * FROM users WHERE email = $1`;
