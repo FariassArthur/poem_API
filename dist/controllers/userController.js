@@ -98,7 +98,11 @@ class UserController {
     }
     static takeUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = req.params.id;
+            const user = req.user;
+            if (!user || user.id === undefined) {
+                return res.status(400).json({ message: "ID do usuário não fornecido" });
+            }
+            const id = user.id;
             try {
                 const user = yield UserModel_1.default.takeOneUser(id);
                 if (user) {
@@ -129,7 +133,6 @@ class UserController {
             const email = req.body.email; // corrigindo para req.body.email
             const password = req.body.password; // corrigindo para req.body.password
             try {
-                const user = yield UserModel_1.default.takeOneUser(id.toString());
                 const salt = process.env.BCRYPT_SALT || "";
                 const passwordHashed = yield bcrypt_1.default.hash(password, parseInt(salt));
                 if (!id) {
@@ -137,8 +140,10 @@ class UserController {
                         message: "O usuário solicitado não foi encontrado no servidor",
                     });
                 }
-                yield UserModel_1.default.UpdateUser(id.toString(), name, email, passwordHashed);
-                res.status(200).json({ message: "Usuário atualizado com sucesso" });
+                const user = yield UserModel_1.default.UpdateUser(id.toString(), name, email, passwordHashed);
+                res
+                    .status(200)
+                    .json({ message: "Usuário atualizado com sucesso", user: user });
             }
             catch (err) {
                 res
@@ -152,7 +157,7 @@ class UserController {
             const email = req.body.email;
             const password = req.body.password;
             try {
-                const user = yield UserModel_1.default.takeOneUser("", email);
+                const user = yield UserModel_1.default.takeOneUser(email);
                 if (!user) {
                     return res.status(404).json({ message: "Usuário não encontrado" });
                 }
