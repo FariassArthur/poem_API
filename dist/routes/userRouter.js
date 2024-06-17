@@ -35,7 +35,7 @@ router.post("/update", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0
 router.get("/id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.takeId(req, res);
 }));
-router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/profile", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.takeUser(req, res);
 }));
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
