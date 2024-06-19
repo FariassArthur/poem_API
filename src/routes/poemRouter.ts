@@ -17,6 +17,10 @@ router.post("/create", authenticateJWT, async (req, res) => {
   await PoemController.poemCreate(req, res);
 });
 
+router.get("/takepoems", async (req, res) => {
+  await PoemController.takePoems(req, res)
+})
+
 router.get("/poemuser", authenticateJWT, async (req, res) => {
   await PoemController.takeUserPoems(req, res);
 });

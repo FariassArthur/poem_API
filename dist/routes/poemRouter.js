@@ -26,6 +26,9 @@ router.post("/likes", (req, res) => __awaiter(void 0, void 0, void 0, function* 
 router.post("/create", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield poemController_1.default.poemCreate(req, res);
 }));
+router.get("/takepoems", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield poemController_1.default.takePoems(req, res);
+}));
 router.get("/poemuser", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield poemController_1.default.takeUserPoems(req, res);
 }));

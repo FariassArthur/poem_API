@@ -98,6 +98,20 @@ class PoemModel {
             }
         });
     }
+    static takePoemsMod() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const client = yield conn_1.default.connect();
+                const codeQuery = `SELECT * FROM poems`;
+                const data = yield client.query(codeQuery);
+                return data.rows;
+                client.release();
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
     static userPoems(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
