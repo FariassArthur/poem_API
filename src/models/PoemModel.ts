@@ -107,6 +107,21 @@ export default class PoemModel {
     }
   }
 
+  static async takePoemsMod() {
+    try {
+      const client = await pool.connect();
+
+      const codeQuery: string = `SELECT * FROM poems`;
+
+      const data = await client.query(codeQuery);
+
+      return data.rows;
+      client.release();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   static async userPoems(id: string) {
     try {
       const client = await pool.connect();

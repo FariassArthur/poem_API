@@ -62,6 +62,16 @@ export default class PoemController {
     }
   }
 
+  static async takePoems(req: Request, res: Response) {
+    try {
+      const data = await PoemModel.takePoemsMod()
+
+      res.status(200).json({data})
+    } catch (err) {
+      res.status(404).json({message: "Não foi possível trazer os textos", error: err})
+    }
+  }
+
   static async takeUserPoems(req: Request, res: Response) {
     const user = req.user;
 

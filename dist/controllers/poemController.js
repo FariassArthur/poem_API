@@ -73,6 +73,17 @@ class PoemController {
             }
         });
     }
+    static takePoems(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield PoemModel_1.default.takePoemsMod();
+                res.status(200).json({ data });
+            }
+            catch (err) {
+                res.status(404).json({ message: "Não foi possível trazer os textos", error: err });
+            }
+        });
+    }
     static takeUserPoems(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = req.user;
