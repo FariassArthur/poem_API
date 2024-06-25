@@ -1,4 +1,3 @@
-//config
 require("dotenv").config();
 
 import express from "express";
@@ -8,19 +7,19 @@ import pool from "./db/conn";
 const app = express();
 const port = process.env.PORT;
 
-//config JSON
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
 // Cors = configura as requisições por fora que são aceitas
 const corsOptions = {
-  origin: "*",
+  origin: "http://localhost:5173",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
+
+//config JSON
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 //routes
 import userRoutes from "./routes/userRouter";
