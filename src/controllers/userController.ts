@@ -91,7 +91,6 @@ export default class UserController {
   }
 
   static async takeUser(req: Request, res: Response) {
-    
     const user = req.user;
 
     if (!user || user.id === undefined) {
@@ -99,7 +98,7 @@ export default class UserController {
     }
 
     const id = user.id;
-    
+
     try {
       const user = await UserModel.takeOneUser(id);
 
@@ -179,7 +178,9 @@ export default class UserController {
         expiresIn: "7d",
       });
 
-      res.status(200).json({ message: "Login bem-sucedido", token });
+      res
+        .status(200)
+        .json({ message: "Login bem-sucedido", token, id: user.id });
     } catch (err) {
       console.error("Erro ao fazer login:", err);
       res.status(500).json({ message: "Erro ao fazer login", error: err });

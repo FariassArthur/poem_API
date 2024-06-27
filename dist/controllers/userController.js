@@ -168,7 +168,9 @@ class UserController {
                 const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, jwtSecret, {
                     expiresIn: "7d",
                 });
-                res.status(200).json({ message: "Login bem-sucedido", token });
+                res
+                    .status(200)
+                    .json({ message: "Login bem-sucedido", token, id: user.id });
             }
             catch (err) {
                 console.error("Erro ao fazer login:", err);
