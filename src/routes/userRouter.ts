@@ -35,6 +35,10 @@ router.get("/profile", authenticateJWT, async (req, res) => {
   await UserController.takeUser(req, res);
 });
 
+router.get("/takebyid/:id", authenticateJWT, async (req, res) => {
+  await UserController.takeUserById(req, res);
+});
+
 router.get("/", async (req, res) => {
   await UserController.checkAndCreateTable(req, res);
 });

@@ -121,6 +121,28 @@ class UserController {
             }
         });
     }
+    static takeUserById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            try {
+                const user = yield UserModel_1.default.takeOneUser(parseInt(id));
+                if (user) {
+                    res.status(200).json({ user });
+                }
+                else {
+                    res
+                        .status(404)
+                        .json({ message: "usuário não foi encontrado no sistema" });
+                }
+            }
+            catch (err) {
+                res.status(404).json({
+                    message: "Não foi possível entregar o usuário pelo id",
+                    error: err,
+                });
+            }
+        });
+    }
     static userAtt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             // Verifica se id está definido
