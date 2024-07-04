@@ -29,7 +29,7 @@ router.get("/delete/:id", authenticateJWT, async (req, res) => {
   await PoemController.deletePoem(req, res);
 });
 
-router.get("/:id", authenticateJWT, async (req, res) => {
+router.get("/:id", async (req, res) => {
   await PoemController.takePoemId(req, res);
 }); //pegar poema por id
 
