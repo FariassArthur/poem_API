@@ -35,7 +35,7 @@ router.get("/poemuser", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 
 router.get("/delete/:id", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield poemController_1.default.deletePoem(req, res);
 }));
-router.get("/:id", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield poemController_1.default.takePoemId(req, res);
 })); //pegar poema por id
 router.post("/update/:id", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
