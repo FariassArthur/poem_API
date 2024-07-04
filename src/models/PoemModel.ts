@@ -32,7 +32,7 @@ export default class PoemModel {
             image_url VARCHAR(255),
             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            userId INTEGER REFERENCES public.users(id)
+            userId INTEGER REFERENCES public.users(id),
         )
         `
           )
@@ -94,7 +94,7 @@ export default class PoemModel {
       let codeQuery: string;
       let values: string[];
       if (image) {
-        codeQuery = `INSERT INTO poems (title, content, userid, image_url) VALUES ($1, $2, $3, $4)`;
+        codeQuery = `INSERT INTO poems (title, content, userId, image_url) VALUES ($1, $2, $3, $4)`;
         values = [title, content, userId, image];
       } else {
         codeQuery = `INSERT INTO poems (title, content, userid) VALUES ($1, $2, $3)`;
