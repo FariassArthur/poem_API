@@ -9,7 +9,7 @@ const port = process.env.PORT;
 
 // Cors = configura as requisições por fora que são aceitas
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
