@@ -17,7 +17,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Middleware para adicionar cabeçalhos CORS a todas as respostas
+/* // Middleware para adicionar cabeçalhos CORS a todas as respostas
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   );
   res.header("Access-Control-Allow-Credentials", "true");
   next();
-});
+}); */
 
 //config JSON
 app.use(express.json());
