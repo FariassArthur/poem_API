@@ -15,7 +15,7 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 /* // Middleware para adicionar cabeçalhos CORS a todas as respostas
 app.use((req, res, next) => {
