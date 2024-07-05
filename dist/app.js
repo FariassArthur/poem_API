@@ -15,7 +15,7 @@ const corsOptions = {
     credentials: true,
     optionsSuccessStatus: 204,
 };
-app.use((0, cors_1.default)(corsOptions));
+app.use((0, cors_1.default)());
 /* // Middleware para adicionar cabeçalhos CORS a todas as respostas
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
