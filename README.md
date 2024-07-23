@@ -1,10 +1,10 @@
 # API do Abismo Poético
 
-![GitHub repo size](https://img.shields.io/github/repo-size/FariassArthur/calculator-imc?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/FariassArthur/calculator-imc?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/FariassArthur/calculator-imc?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/FariassArthur/calculator-imc?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/FariassArthur/calculator-imc?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/FariassArthur/poem_API?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/FariassArthur/poem_API?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/FariassArthur/poem_API?style=for-the-badge)
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues/FariassArthur/poem_API?style=for-the-badge)
+![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/FariassArthur/poem_API?style=for-the-badge)
 
 A API do Abismo Poético é construída utilizando Node.js com TypeScript, fornecendo uma base sólida e eficiente para a manipulação de dados e lógica de negócios. Utilizamos PostgreSQL como banco de dados relacional, garantindo a integridade e a consistência dos dados. A combinação dessas tecnologias permite a criação de endpoints seguros e performáticos para as funcionalidades da aplicação.
 
