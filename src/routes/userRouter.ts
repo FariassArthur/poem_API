@@ -23,7 +23,7 @@ router.post("/delete", authenticateJWT, async (req, res) => {
 });
 
 // Use a interface AuthMiddleware para tipar o middleware
-router.post("/update", authenticateJWT, async (req, res) => {
+router.patch("/update", authenticateJWT, async (req, res) => {
   await UserController.userAtt(req, res);
 });
 
