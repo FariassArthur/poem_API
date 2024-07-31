@@ -25,7 +25,7 @@ router.get("/poemuser", authenticateJWT, async (req, res) => {
   await PoemController.takeUserPoems(req, res);
 });
 
-router.get("/delete/:id", authenticateJWT, async (req, res) => {
+router.delete("/delete/:id", authenticateJWT, async (req, res) => {
   await PoemController.deletePoem(req, res);
 });
 
@@ -33,7 +33,7 @@ router.get("/:id", async (req, res) => {
   await PoemController.takePoemId(req, res);
 }); //pegar poema por id
 
-router.post("/update/:id", authenticateJWT, async (req, res) => {
+router.patch("/update/:id", authenticateJWT, async (req, res) => {
   await PoemController.updatePoem(req, res);
 });
 
