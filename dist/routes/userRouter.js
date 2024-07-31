@@ -29,7 +29,7 @@ router.post("/delete", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0
     yield userController_1.default.userDelete(req, res);
 }));
 // Use a interface AuthMiddleware para tipar o middleware
-router.post("/update", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/update", AuthJwt_1.authenticateJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield userController_1.default.userAtt(req, res);
 }));
 router.get("/id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
